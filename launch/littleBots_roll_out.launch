@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+	
+	//Controler for player 1
+	<node pkg="joy" type="joy_node" name="joy_node1" >
+		<remap from="joy" to="playerJoy1" />
+		<param name="dev" value ="/dev/input/js0" />
+		<param name="deadzone" value ="0.1" />
+	</node >
+
+	//Controler for player 2
+	<node pkg="joy" type="joy_node" name="joy_node2" >
+		<remap from="joy" to="playerJoy2" />
+		<param name="dev" value ="/dev/input/js1" />
+		<param name="deadzone" value ="0.1" />
+	</node >
+
+	<node pkg="little_bots" type="botController" name="botController" output="screen"/>
+	
+	//UDP server
+	<node pkg="little_bots" type="udpserver.py" name="udpserver" output="screen"/>
+	
+
+</launch>
