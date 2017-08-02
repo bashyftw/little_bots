@@ -2,13 +2,8 @@
 #define LITTLEBOT_H
 
 
-
-
-
 using namespace std;
 #include <string>
-
-
 
 
 

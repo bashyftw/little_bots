@@ -4,10 +4,12 @@ project(little_bots)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs genmsg)
+find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs genmsg cmake_modules)
+
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
+find_package(TinyXML REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -97,7 +99,7 @@ catkin_package(
 	#INCLUDE_DIRS include
 	LIBRARIES littleBot
 	#CATKIN_DEPENDS other_catkin_pkg
-	DEPENDS system_lib
+	DEPENDS system_lib TinyXML
 )
 
 ###########
@@ -184,13 +186,14 @@ catkin_package(
 
 
 include_directories(include ${catkin_INCLUDE_DIRS})
-
+include_directories(include ${catkin_INCLUDE_DIRS} ${TinyXML_INCLUDE_DIRS})
 
 add_executable(botController src/botController.cpp)
 add_library(littleBot  src/littleBot.cpp)
 add_library(effect  src/effectClass.cpp)
 #add_library(turboboost  src/effectClass.cpp)
 
+target_link_libraries(botController ${catkin_LIBRARIES} ${TinyXML_LIBRARIES})
 target_link_libraries(botController ${catkin_LIBRARIES}) 
 target_link_libraries(botController littleBot) 
 target_link_libraries(botController effect) 

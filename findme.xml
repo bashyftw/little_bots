@@ -1,0 +1,4 @@
+<Player>
+    <Stats velocityForwardMax="50" velocityReverseMax="30" turningMax="20" acceleration="5" />
+    <Abilities abilityA="stun" abilityB="turboBoost" abilityX="randomEff" abilityY="empty" />
+</Player>

@@ -4,13 +4,14 @@
 #include "little_bots/botMsg.h"
 #include <string>
 #include <vector>
-
+#include <tinyxml.h>
 
 #include "effectClass.h"
 #include "littleBot.h"
 
-
 using namespace std;
+//tinyxml2::XMLDocument xmlDoc("hello.xml");
+
 
 
 //update rate 10Hz
@@ -29,6 +30,8 @@ little_bots::botMsg CMD_Message;
 ///forward Dec
 void addEffect(string effName, littleBot* c, littleBot* t);
 void updateCB(const ros::TimerEvent&);
+void dump_to_stdout(const char* pFilename);
+int dump_attribs_to_stdout(TiXmlElement* pElement, unsigned int indent);
 ros::Publisher botCMD_pub;
 
 
@@ -70,6 +73,7 @@ void joyCB2(const sensor_msgs::Joy::ConstPtr& joy)
 
 int main(int argc, char **argv)
 {
+	dump_to_stdout("../littleBots_ws/src/little_bots/findme.xml");
 
   ros::init(argc, argv, "botController");
   ros::NodeHandle n;
@@ -167,4 +171,71 @@ void updateCB(const ros::TimerEvent&)
   botCMD_pub.publish(CMD_Message);
 
 
+}
+
+void dump_to_stdout(const char* pFilename)
+{
+	TiXmlDocument doc(pFilename);
+	bool loadOkay = doc.LoadFile();
+	if (loadOkay)
+	{
+		printf("\n%s:\n", pFilename);
+		dump_attribs_to_stdout( &doc, 0 ); // defined later in the tutorial
+	}
+	else
+	{
+		printf("Failed to load file \"%s\"\n", pFilename);
+	
+		}
+
+	TiXmlDocument NewPlayer;
+	TiXmlElement* player = new TiXmlElement("Player");
+	NewPlayer.LinkEndChild(player);
+		TiXmlElement* stats = new TiXmlElement("Stats");
+		player->LinkEndChild(stats);
+	 	stats->SetAttribute("velocityForwardMax", "50");
+	 	stats->SetAttribute("velocityReverseMax", "30");
+	 	stats->SetAttribute("turningMax", "20");
+	 	stats->SetAttribute("acceleration", "5");
+
+	 	TiXmlElement* abilities = new TiXmlElement("Abilities");
+	 	player->LinkEndChild(abilities);
+	 	abilities->SetAttribute("abilityA", "stun");
+	 	abilities->SetAttribute("abilityB", "turboBoost");
+	 	abilities->SetAttribute("abilityX", "randomEff");
+	 	abilities->SetAttribute("abilityY", "empty");
+		NewPlayer.SaveFile("../littleBots_ws/src/little_bots/findme.xml");
+}
+
+const char * getIndent( unsigned int numIndents )
+{
+    static const char * pINDENT = "                                      + ";
+    static const unsigned int LENGTH = strlen( pINDENT );
+
+    if ( numIndents > LENGTH ) numIndents = LENGTH;
+
+    return &pINDENT[ LENGTH-numIndents ];
+}
+
+int dump_attribs_to_stdout(TiXmlElement* pElement, unsigned int indent)
+{
+	if ( !pElement ) return 0;
+
+	TiXmlAttribute* pAttrib=pElement->FirstAttribute();
+	int i=0;
+	int ival;
+	double dval;
+	const char* pIndent=getIndent(indent);
+	printf("\n");
+	while (pAttrib)
+	{
+		printf( "%s%s: value=[%s]", pIndent, pAttrib->Name(), pAttrib->Value());
+
+		if (pAttrib->QueryIntValue(&ival)==TIXML_SUCCESS)    printf( " int=%d", ival);
+		if (pAttrib->QueryDoubleValue(&dval)==TIXML_SUCCESS) printf( " d=%1.1f", dval);
+		printf( "\n" );
+		i++;
+		pAttrib=pAttrib->Next();
+	}
+	return i;
 }
