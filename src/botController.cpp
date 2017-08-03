@@ -186,11 +186,11 @@ void dump_to_stdout(const char* pFilename)
                 pRoot = doc.FirstChildElement("Player");
                 if(pRoot)
                 {
-                    pParm = pRoot->FirstChildElement("Stats");
+                    pParm = pRoot->FirstChildElement("AbilityA");
                     while(pParm)
                     {
-                        P1.setVelocity(atoi(pParm->Attribute("velocityForwardMax")));
-                        printf("%s\n", pParm->Attribute("velocityForwardMax"));
+                        P1.setVelocity(atoi(pParm->Attribute("CoolDown")));
+                        printf("%s\n", pParm->Attribute("CoolDown"));
                         pParm = pParm->NextSiblingElement("Stats");
                     }
                 }
@@ -205,6 +205,7 @@ void dump_to_stdout(const char* pFilename)
 	TiXmlDocument NewPlayer;
 	TiXmlElement* player = new TiXmlElement("Player");
 	NewPlayer.LinkEndChild(player);
+  player->SetAttribute("Name", "Bashy");
 		TiXmlElement* stats = new TiXmlElement("Stats");
 		player->LinkEndChild(stats);
 	 	stats->SetAttribute("velocityForwardMax", "50");
@@ -214,10 +215,27 @@ void dump_to_stdout(const char* pFilename)
 
 	 	TiXmlElement* abilities = new TiXmlElement("Abilities");
 	 	player->LinkEndChild(abilities);
-	 	abilities->SetAttribute("abilityA", "stun");
-	 	abilities->SetAttribute("abilityB", "turboBoost");
-	 	abilities->SetAttribute("abilityX", "randomEff");
-	 	abilities->SetAttribute("abilityY", "empty");
+      TiXmlElement* abilityA = new TiXmlElement("AbilityA");
+      abilities->LinkEndChild(abilityA);
+        abilityA->SetAttribute("AbilityName", "stun");
+        abilityA->SetAttribute("Duration", "2");
+        abilityA->SetAttribute("CoolDown", "30");
+      TiXmlElement* abilityB = new TiXmlElement("AbilityB");
+      abilities->LinkEndChild(abilityB);
+        abilityB->SetAttribute("AbilityName", "turboBoost");
+        abilityB->SetAttribute("Duration", "3");
+        abilityB->SetAttribute("CoolDown", "9");
+      TiXmlElement* abilityX = new TiXmlElement("AbilityX");
+      abilities->LinkEndChild(abilityX);
+        abilityX->SetAttribute("AbilityName", "randomEff");
+        abilityX->SetAttribute("Duration", "2");
+        abilityX->SetAttribute("CoolDown", "15");
+      TiXmlElement* abilityY = new TiXmlElement("AbilityY");
+      abilities->LinkEndChild(abilityY);
+        abilityY->SetAttribute("AbilityName", "na");
+        abilityY->SetAttribute("Duration", "0");
+        abilityY->SetAttribute("CoolDown", "0");
+
 		NewPlayer.SaveFile("../littleBots_ws/src/little_bots/findme.xml");
 }
 

@@ -1,4 +1,9 @@
-<Player>
+<Player Name="Bashy">
     <Stats velocityForwardMax="50" velocityReverseMax="30" turningMax="20" acceleration="5" />
-    <Abilities abilityA="stun" abilityB="turboBoost" abilityX="randomEff" abilityY="empty" />
+    <Abilities>
+        <AbilityA AbilityName="stun" Duration="2" CoolDown="30" />
+        <AbilityB AbilityName="turboBoost" Duration="3" CoolDown="9" />
+        <AbilityX AbilityName="randomEff" Duration="2" CoolDown="15" />
+        <AbilityY AbilityName="na" Duration="0" CoolDown="0" />
+    </Abilities>
 </Player>
