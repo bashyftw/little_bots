@@ -1,5 +1,6 @@
 #include "littleBot.h"
 #include <iostream>
+#include <tinyxml.h>
 
 using namespace std;
 #include <string>
@@ -108,7 +109,7 @@ void littleBot::effectWithinRange(){
 //Class Constructor
 //Class Constructor default
 littleBot::littleBot(){
-     cout << "creating player" << endl;
+     cout << "creating player default" << endl;
      ipAddress = "192.168.1.174";
      velocityForwardMax = 60;
      velocityReverseMax = 40;
@@ -128,7 +129,7 @@ littleBot::littleBot(string ip, double vFM, double vRM, double tM, double acc){
 
 
 littleBot::littleBot(bool fullpower){
-     cout << "creating player" << endl;
+     cout << "creating player fullpower" << endl;
      ipAddress = "192.168.1.172";
      velocityForwardMax = 60;
      velocityReverseMax = 40;
@@ -138,6 +139,39 @@ littleBot::littleBot(bool fullpower){
      
 
 }
+
+littleBot::littleBot(string Name){
+     cout << "creating player by file" << endl;
+     std::stringstream ss;
+     ss << "../littleBots_ws/src/little_bots/players/" << Name << ".xml";
+     const char * filename = ss.str().c_str();
+     TiXmlDocument doc(filename);
+     bool loadOkay = doc.LoadFile();
+     if (loadOkay)
+     {
+          printf("Player file loaded :  \"%s\"\n", filename);
+          TiXmlHandle hDoc(&doc);
+          TiXmlElement *pRoot, *pParm;
+          pRoot = doc.FirstChildElement("Player");
+          pParm = pRoot->FirstChildElement("Stats");
+               velocityForwardMax = atoi(pParm->Attribute("velocityForwardMax"));
+               velocityReverseMax = atoi(pParm->Attribute("velocityReverseMax"));
+               turningMax = atoi(pParm->Attribute("turningMax"));
+               acceleration = atoi(pParm->Attribute("acceleration"));
+               ipAddress = pParm->Attribute("ip");
+               cout << ipAddress << endl;
+     
+
+     }
+     else
+     {
+          printf("Failed to load file \"%s\"\n", filename);
+     
+     }
+}
+     
+
+
 
 
 

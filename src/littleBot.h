@@ -23,6 +23,7 @@ class littleBot
 
      public :
           littleBot();
+          littleBot(string Name);
           littleBot(string ip, double vFM, double vRM, double tM, double acc);
           
           littleBot(bool fullpower);

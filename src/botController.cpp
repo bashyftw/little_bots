@@ -17,10 +17,10 @@ using namespace std;
 //update rate 10Hz
 int rate = 10;
 
-//Create Bots
-//littleBot P2("192.168.1.172",5,2,1,0.05);
-littleBot P1;
-littleBot P2(true);
+///////Create Bots ///////
+
+littleBot P1(string("bashy"));
+littleBot P2(string("captionWOW"));
 
 vector<effect> effectList;
 
@@ -30,8 +30,8 @@ little_bots::botMsg CMD_Message;
 ///forward Dec
 void addEffect(string effName, littleBot* c, littleBot* t);
 void updateCB(const ros::TimerEvent&);
-void dump_to_stdout(const char* pFilename);
-int dump_attribs_to_stdout(TiXmlElement* pElement, unsigned int indent);
+void playerReadDemo(const char* pFilename);
+void createPlayerXML (string name);
 ros::Publisher botCMD_pub;
 
 
@@ -73,7 +73,7 @@ void joyCB2(const sensor_msgs::Joy::ConstPtr& joy)
 
 int main(int argc, char **argv)
 {
-	dump_to_stdout("../littleBots_ws/src/little_bots/findme.xml");
+	//createPlayerXML("captionWOW");
 
   ros::init(argc, argv, "botController");
   ros::NodeHandle n;
@@ -173,45 +173,20 @@ void updateCB(const ros::TimerEvent&)
 
 }
 
-void dump_to_stdout(const char* pFilename)
+//////this is a default layout for xml creation/////
+void createPlayerXML (string name)
 {
-	TiXmlDocument doc(pFilename);
-	bool loadOkay = doc.LoadFile();
-	if (loadOkay)
-	{
-		printf("\n%s:\n", pFilename);
-
-                TiXmlHandle hDoc(&doc);
-                TiXmlElement *pRoot, *pParm;
-                pRoot = doc.FirstChildElement("Player");
-                if(pRoot)
-                {
-                    pParm = pRoot->FirstChildElement("AbilityA");
-                    while(pParm)
-                    {
-                        P1.setVelocity(atoi(pParm->Attribute("CoolDown")));
-                        printf("%s\n", pParm->Attribute("CoolDown"));
-                        pParm = pParm->NextSiblingElement("Stats");
-                    }
-                }
-
-	}
-	else
-	{
-		printf("Failed to load file \"%s\"\n", pFilename);
-	
-		}
-
 	TiXmlDocument NewPlayer;
 	TiXmlElement* player = new TiXmlElement("Player");
 	NewPlayer.LinkEndChild(player);
-  player->SetAttribute("Name", "Bashy");
+  player->SetAttribute("Name", name);
 		TiXmlElement* stats = new TiXmlElement("Stats");
 		player->LinkEndChild(stats);
 	 	stats->SetAttribute("velocityForwardMax", "50");
 	 	stats->SetAttribute("velocityReverseMax", "30");
 	 	stats->SetAttribute("turningMax", "20");
 	 	stats->SetAttribute("acceleration", "5");
+    stats->SetAttribute("ip", "192.168.1.172");
 
 	 	TiXmlElement* abilities = new TiXmlElement("Abilities");
 	 	player->LinkEndChild(abilities);
@@ -236,6 +211,9 @@ void dump_to_stdout(const char* pFilename)
         abilityY->SetAttribute("Duration", "0");
         abilityY->SetAttribute("CoolDown", "0");
 
-		NewPlayer.SaveFile("../littleBots_ws/src/little_bots/findme.xml");
+    std::stringstream ss;
+    ss << "../littleBots_ws/src/little_bots/players/" << name << ".xml";
+    const char * c = ss.str().c_str();
+		NewPlayer.SaveFile(c);
 }
 

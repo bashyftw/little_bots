@@ -1,5 +1,5 @@
-<Player Name="Bashy">
-    <Stats velocityForwardMax="50" velocityReverseMax="30" turningMax="20" acceleration="5" />
+<Player Name="bashy">
+    <Stats velocityForwardMax="50" velocityReverseMax="30" turningMax="20" acceleration="5" ip="192.168.1.172" />
     <Abilities>
         <AbilityA AbilityName="stun" Duration="2" CoolDown="30" />
         <AbilityB AbilityName="turboBoost" Duration="3" CoolDown="9" />
