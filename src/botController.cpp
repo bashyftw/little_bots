@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <tinyxml.h>
+#include <map>
 
 #include "effectClass.h"
 #include "littleBot.h"
@@ -12,6 +13,12 @@
 using namespace std;
 //tinyxml2::XMLDocument xmlDoc("hello.xml");
 
+
+
+    std::map<std::string, effect> catalog; 
+    catalog.insert(std::map<std::string, effect>::value_type("test", effect yy);
+
+    //std::cout << catalog["test"].x << " " << catalog["test"].y << std::endl;
 
 
 //update rate 10Hz
@@ -172,6 +179,8 @@ void updateCB(const ros::TimerEvent&)
 
 
 }
+
+
 
 //////this is a default layout for xml creation/////
 void createPlayerXML (string name)
