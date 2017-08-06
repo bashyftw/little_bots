@@ -80,6 +80,10 @@ effect::effect(){
 
 
 ///////////////////////////////////
+turboBoost::turboBoost(){
+	cout << "turbo baby" << endl;
+};
+
 turboBoost::turboBoost(littleBot* c, littleBot* t){
 	caster = c;
 	target = t;
@@ -99,7 +103,9 @@ void turboBoost::applyEffect(){
 
 
 ///////////////////////////////////
-stun::stun(){};
+stun::stun(){
+	cout << "get stunned" << endl;
+};
 
 stun::stun(littleBot* c, littleBot* t){
 	caster = c;
@@ -138,3 +144,9 @@ void randomEff::applyEffect(){
 }
 
 
+effect* effect::Create(string type) {
+    if ( type == "turboBoost" ) return new turboBoost();
+    if ( type == "stun" ) return new stun();
+    return NULL;
+
+}

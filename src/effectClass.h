@@ -24,8 +24,8 @@ class effect{
      	effect();
      	effect(littleBot* c, littleBot* t);
 
-
-     	virtual void applyEffect();
+        static effect* Create(string type);
+     	  virtual void applyEffect();
       	bool checkCD(string name, littleBot* caster);
       	bool checkTimeElapse();
       	bool checkEffectActive();
@@ -36,6 +36,7 @@ class turboBoost : public effect{
 	private:
 		
 	public:
+    turboBoost();
 		turboBoost(littleBot* c, littleBot* t);
 		void applyEffect();
 

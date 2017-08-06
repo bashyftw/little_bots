@@ -11,15 +11,6 @@
 #include "littleBot.h"
 
 using namespace std;
-//tinyxml2::XMLDocument xmlDoc("hello.xml");
-
-
-
-    std::map<std::string, effect> catalog; 
-    catalog.insert(std::map<std::string, effect>::value_type("test", effect yy);
-
-    //std::cout << catalog["test"].x << " " << catalog["test"].y << std::endl;
-
 
 //update rate 10Hz
 int rate = 10;
@@ -97,7 +88,8 @@ int main(int argc, char **argv)
   // turboBoost bb(&P1, &P1);
   // effectList.push_back(aa);
   // effectList.push_back(bb);
-
+  effect* obj2 = effect::Create("turboBoost");
+  effect* obj1 = effect::Create("stun");
 
   //addEffect("turboBoost", &P1, &P1);
 
