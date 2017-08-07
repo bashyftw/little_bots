@@ -36,23 +36,9 @@ ros::Publisher botCMD_pub;
 
 
 
-void joyCB1(const sensor_msgs::Joy::ConstPtr& joy)
+void joyCB(const sensor_msgs::Joy::ConstPtr& joy, const int &player)
 {
-  P1.setVelocity (joy->axes[1]);
-  P1.setTurning (joy->axes[3]);
-  if (joy->buttons[0]){
-    addEffect("stun", &P1, &P2);
-  }
-  if (joy->buttons[1]){
-    addEffect("turboBoost", &P1, &P1);
-  }
-  if (joy->buttons[2]){
-    addEffect("randomEff", &P1, &P2);
-  }
-}
-
-void joyCB2(const sensor_msgs::Joy::ConstPtr& joy)
-{
+cout << player << endl;
   P2.setVelocity (joy->axes[1]);
   P2.setTurning (joy->axes[3]);
     if (joy->buttons[0]){
@@ -69,6 +55,8 @@ void joyCB2(const sensor_msgs::Joy::ConstPtr& joy)
 
 
 
+
+
 int main(int argc, char **argv)
 {
 	//createPlayerXML("captionWOW");
@@ -78,8 +66,9 @@ int main(int argc, char **argv)
 
   ros::Rate update_rate(rate);
 
-  ros::Subscriber sub1 = n.subscribe("playerJoy1", 1, joyCB1);
-  ros::Subscriber sub2 = n.subscribe("playerJoy2", 1, joyCB2);
+  ros::Subscriber sub1 = n.subscribe<sensor_msgs::Joy>("playerJoy1", 1, boost::bind(joyCB, _1, 1));
+  ros::Subscriber sub2 = n.subscribe<sensor_msgs::Joy>("playerJoy2", 1, boost::bind(joyCB, _1, 2));
+
   botCMD_pub = n.advertise<little_bots::botMsg>("botCMD", 1);
   CMD_Message.num_players = 2;
   

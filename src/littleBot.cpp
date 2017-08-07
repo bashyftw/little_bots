@@ -1,4 +1,5 @@
 #include "littleBot.h"
+#include "effectClass.h"
 #include <iostream>
 #include <tinyxml.h>
 
@@ -107,26 +108,6 @@ void littleBot::effectWithinRange(){
 }
 
 //Class Constructor
-//Class Constructor default
-littleBot::littleBot(){
-     cout << "creating player default" << endl;
-     ipAddress = "192.168.1.174";
-     velocityForwardMax = 60;
-     velocityReverseMax = 40;
-     turningMax = 40;
-     acceleration = 10;
-}
-
-littleBot::littleBot(string ip, double vFM, double vRM, double tM, double acc){
-     cout << "creating player" << endl;
-     ipAddress = ip;
-     velocityForwardMax = vFM;
-     velocityReverseMax = vRM;
-     turningMax = tM;
-     acceleration = acc;
-}
-
-
 
 littleBot::littleBot(bool fullpower){
      cout << "creating player fullpower" << endl;
@@ -141,6 +122,7 @@ littleBot::littleBot(bool fullpower){
 }
 
 littleBot::littleBot(string Name){
+
      cout << "creating player by file" << endl;
      std::stringstream ss;
      ss << "../littleBots_ws/src/little_bots/players/" << Name << ".xml";
@@ -151,16 +133,20 @@ littleBot::littleBot(string Name){
      {
           printf("Player file loaded :  \"%s\"\n", filename);
           TiXmlHandle hDoc(&doc);
-          TiXmlElement *pRoot, *pParm;
+          TiXmlElement *pRoot, *pStats, *pAbilities; 
           pRoot = doc.FirstChildElement("Player");
-          pParm = pRoot->FirstChildElement("Stats");
-               velocityForwardMax = atoi(pParm->Attribute("velocityForwardMax"));
-               velocityReverseMax = atoi(pParm->Attribute("velocityReverseMax"));
-               turningMax = atoi(pParm->Attribute("turningMax"));
-               acceleration = atoi(pParm->Attribute("acceleration"));
-               ipAddress = pParm->Attribute("ip");
+          pStats = pRoot->FirstChildElement("Stats");
+               velocityForwardMax = atoi(pStats->Attribute("velocityForwardMax"));
+               velocityReverseMax = atoi(pStats->Attribute("velocityReverseMax"));
+               turningMax = atoi(pStats->Attribute("turningMax"));
+               acceleration = atoi(pStats->Attribute("acceleration"));
+               ipAddress = pStats->Attribute("ip");
                cout << ipAddress << endl;
-     
+          pAbilities = pStats->NextSiblingElement("Abilities"); // currently only looking at forst two abilities
+               pAbilities = pAbilities->FirstChildElement("AbilityA");
+                    effect* AbilityA = effect::Create(pAbilities->Attribute("AbilityName")); 
+               pAbilities = pAbilities->NextSiblingElement("AbilityB");
+                    effect* AbilityB = effect::Create(pAbilities->Attribute("AbilityName")); 
 
      }
      else
