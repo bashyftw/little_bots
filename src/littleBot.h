@@ -14,6 +14,13 @@ class littleBot
      struct coolDown{
           string effectName;
           double startTime;
+          int id;
+     };
+
+     struct activeEffect{
+          string effectName;
+          double effectCD;
+          double effectDur;
      };
 
      private:
@@ -28,6 +35,7 @@ class littleBot
           effect* Ability;
           list<effect*>effectList;
           list<coolDown*>coolDownList;
+          activeEffect activeEffectArray[6];
 
           string AbilityA;
           double ACD;
@@ -70,7 +78,7 @@ class littleBot
 
 
           void useEffect(int E, littleBot* t);
-
+          bool effectOnCD(string abilitySelected);
 
 
                     

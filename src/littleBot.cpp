@@ -80,6 +80,16 @@ void littleBot::update(){
      }
 
      withinRange();
+
+     /////check cooldowns and remove
+     for(list<coolDown*>::iterator i = coolDownList.begin(); i !=coolDownList.end(); i++)
+     {
+          coolDown* test = *i;
+          if( (tmr.elapsed() - test->startTime) > activeEffectArray[test->id].effectCD){
+               cout << "time up" <<endl;
+               coolDownList.erase(i++); // not sure why i++ not i
+          } 
+     }
 }
 
 void littleBot::withinRange(){
@@ -112,24 +122,31 @@ void littleBot::effectWithinRange(){
 
 
 void littleBot::useEffect(int E, littleBot* t){
-     string abilitySelected;
-     switch(E) {
-      case 0 : {abilitySelected = AbilityA; break;}
-      case 1 : {abilitySelected = AbilityB; break;}
-      case 2 : {abilitySelected = AbilityX; break;}
+     string abilitySelected = activeEffectArray[E].effectName;
+     if (!effectOnCD(abilitySelected)){
+          ////Creates effect
+          Ability = effect::Create(abilitySelected);
+          //creates cool Down
+          coolDown * CDptr = new coolDown();
+          CDptr->effectName = abilitySelected;
+          CDptr->startTime = tmr.elapsed();
+          CDptr->id = E;
+          coolDownList.push_back(CDptr);
+     }else {
+          cout << "on CD" << endl;
+     }
 
-  }
-     cout << abilitySelected << endl;
-     coolDown* CDtest;
-     CDtest->effectName = "stun";
-     // CDtest->startTime = 66;
-     // coolDownList.push_back(CDtest);
-     // for(list<coolDown*>::iterator i = coolDownList.begin(); i !=coolDownList.end(); i++)
-     //                {
-     //                     coolDown* test = *i;
-     //                     if( test->effectName == "stun"){cout << "stun" << endl;} 
-     //                }
-     //  Ability = effect::Create(abilitySelected);
+     
+}
+
+bool littleBot::effectOnCD(string abilitySelected){
+     for(list<coolDown*>::iterator i = coolDownList.begin(); i !=coolDownList.end(); i++)
+     {
+          coolDown* test = *i;
+          if( test->effectName == abilitySelected){return true;} 
+     }
+     return false;
+
 }
 
 //Class Constructor
@@ -167,19 +184,19 @@ littleBot::littleBot(string Name){
                acceleration = atoi(pStats->Attribute("acceleration"));
                ipAddress = pStats->Attribute("ip");
                cout << ipAddress << endl;
-          pAbilities = pStats->NextSiblingElement("Abilities"); // currently only looking at forst two abilities
+          pAbilities = pStats->NextSiblingElement("Abilities"); // currently only looking at first three abilities should be loop
                pAbilities = pAbilities->FirstChildElement("AbilityA");
-                    AbilityA = string(pAbilities->Attribute("AbilityName"));
-                    ACD = atof(pAbilities->Attribute("CoolDown")); 
-                    ADur = atof(pAbilities->Attribute("Duration")); 
+                    activeEffectArray[0].effectName = string(pAbilities->Attribute("AbilityName"));
+                    activeEffectArray[0].effectCD = atof(pAbilities->Attribute("CoolDown")); 
+                    activeEffectArray[0].effectDur = atof(pAbilities->Attribute("Duration"));
                pAbilities = pAbilities->NextSiblingElement("AbilityB");
-                    AbilityB = pAbilities->Attribute("AbilityName");
-                    BCD = atof(pAbilities->Attribute("CoolDown")); 
-                    BDur = atof(pAbilities->Attribute("Duration"));
+                    activeEffectArray[1].effectName = string(pAbilities->Attribute("AbilityName"));
+                    activeEffectArray[1].effectCD = atof(pAbilities->Attribute("CoolDown")); 
+                    activeEffectArray[1].effectDur = atof(pAbilities->Attribute("Duration"));
                pAbilities = pAbilities->NextSiblingElement("AbilityX");
-                    AbilityX = pAbilities->Attribute("AbilityName");
-                    XCD = atof(pAbilities->Attribute("CoolDown")); 
-                    XDur = atof(pAbilities->Attribute("Duration"));
+                    activeEffectArray[2].effectName = string(pAbilities->Attribute("AbilityName"));
+                    activeEffectArray[2].effectCD = atof(pAbilities->Attribute("CoolDown")); 
+                    activeEffectArray[2].effectDur = atof(pAbilities->Attribute("Duration"));
 
 
                     //Ability = effect::Create(pAbilities->Attribute("AbilityName")); 
