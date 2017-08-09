@@ -119,10 +119,17 @@ void littleBot::useEffect(int E, littleBot* t){
       case 2 : {abilitySelected = AbilityX; break;}
 
   }
-     for(list<effect*>::iterator i = effectlist.begin(); i !=effectlist.end(); i++)
-                    {
-                    }
-      Ability = effect::Create(abilitySelected);
+     cout << abilitySelected << endl;
+     coolDown* CDtest;
+     CDtest->effectName = "stun";
+     // CDtest->startTime = 66;
+     // coolDownList.push_back(CDtest);
+     // for(list<coolDown*>::iterator i = coolDownList.begin(); i !=coolDownList.end(); i++)
+     //                {
+     //                     coolDown* test = *i;
+     //                     if( test->effectName == "stun"){cout << "stun" << endl;} 
+     //                }
+     //  Ability = effect::Create(abilitySelected);
 }
 
 //Class Constructor
