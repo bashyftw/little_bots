@@ -3,10 +3,14 @@
 #include <string>
 #include <iostream>
 #include <algorithm> 
+#include <list>
 
 
 using namespace std;
-Timer tmr;
+
+
+
+
 
 
 //////Effect Base Class
@@ -17,14 +21,28 @@ effect::effect(littleBot* c, littleBot* t){
 	duration = 10000;
 }
 
+effect::effect(){
+	cout << "effect constructor" << endl;
+	name = "testing 123";
+}
+
+string effect::getName(){
+	cout << name <<endl;
+	return name;
+}
+
+void effect::setName(string n){
+	name = n; 
+}
+
 bool effect::checkTimeElapse(){
-	
+	double runTime = 0;
 	if (timerStart == 0){
-		timerStart = tmr.elapsed();
+		//timerStart = tmr.elapsed();
 		return false;
 	}else{
-		double runTime = tmr.elapsed() - timerStart;
-		cout << name << "  " << runTime << endl;
+		//double runTime = tmr.elapsed() - timerStart;
+		//cout << name << "  " << runTime << endl;
 
 		if (runTime>(max(duration,coolDown))){
 			return true;
@@ -37,7 +55,8 @@ bool effect::checkTimeElapse(){
 }
 
 bool effect::checkEffectActive(){
-	double runTime = tmr.elapsed() - timerStart;
+	double runTime = 0;
+	//double runTime = tmr.elapsed() - timerStart;
 	if (runTime<duration){
 			return true;
 		}else{
@@ -73,14 +92,15 @@ if (name == n && c == caster)
 }
 
 
-effect::effect(){
 
-}
+
+
 
 
 
 ///////////////////////////////////
 turboBoost::turboBoost(){
+	name = "turboBoost";
 	cout << "turbo baby" << endl;
 };
 
@@ -104,6 +124,7 @@ void turboBoost::applyEffect(){
 
 ///////////////////////////////////
 stun::stun(){
+	name = "stun";
 	cout << "get stunned" << endl;
 };
 
@@ -125,7 +146,10 @@ void stun::applyEffect(){
 
 
 ///////////////////////////////////
-randomEff::randomEff(){};
+randomEff::randomEff(){
+	name = "randomEff";
+	cout << "randimer" << endl;
+};
 
 randomEff::randomEff(littleBot* c, littleBot* t){
 	caster = c;
@@ -147,6 +171,7 @@ void randomEff::applyEffect(){
 effect* effect::Create(string type) {
     if ( type == "turboBoost" ) return new turboBoost();
     if ( type == "stun" ) return new stun();
+    if ( type == "randomEff" ) return new randomEff();
     return NULL;
 
 }

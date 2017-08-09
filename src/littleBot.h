@@ -5,11 +5,17 @@
 using namespace std;
 #include <string>
 
-
+#include <list>
+#include "effectClass.h"
 
 
 class littleBot
 {
+     struct coolDown{
+          string effectName;
+          double startTime;
+     };
+
      private:
           string ipAddress;
           double velocityForwardMax;
@@ -18,12 +24,35 @@ class littleBot
           double acceleration;
           double currentVel;  
           double currentTurn;
-          double velocityCMD;   
+          double velocityCMD;
+          effect* Ability;
+          list<effect*>effectList;
+          list<coolDown*>coolDownList;
+
+          string AbilityA;
+          double ACD;
+          double ADur;
+
+          string AbilityB;
+          double BCD;
+          double BDur;
+
+          string AbilityX;
+          double XCD;
+          double XDur;
+
+          string AbilityY;
+          double YCD;
+          double YDur;
+
+
+
+ 
 
      public :
           littleBot(string Name);
-          
           littleBot(bool fullpower);
+
           
           double getVelocity();
           void setVelocity(double velCMD);
@@ -40,9 +69,28 @@ class littleBot
           string getIP();
 
 
+          void useEffect(int E, littleBot* t);
+
 
 
                     
+};
+
+class Timer
+{
+public:
+    Timer() { clock_gettime(CLOCK_REALTIME, &beg_); }
+
+    double elapsed() {
+        clock_gettime(CLOCK_REALTIME, &end_);
+        return end_.tv_sec - beg_.tv_sec +
+            (end_.tv_nsec - beg_.tv_nsec) / 1000000000.;
+    }
+
+    void reset() { clock_gettime(CLOCK_REALTIME, &beg_); }
+
+private:
+    timespec beg_, end_;
 };
 
 

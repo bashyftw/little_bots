@@ -36,20 +36,35 @@ ros::Publisher botCMD_pub;
 
 
 
-void joyCB(const sensor_msgs::Joy::ConstPtr& joy, const int &player)
+void joyCB(const sensor_msgs::Joy::ConstPtr& joy, const int &joyNo)
 {
-cout << player << endl;
-  P2.setVelocity (joy->axes[1]);
-  P2.setTurning (joy->axes[3]);
-    if (joy->buttons[0]){
-    addEffect("stun", &P2, &P1);
+  littleBot *player, *target;
+  //littleBot &target;
+  switch(joyNo) {
+      case 1 : {player = &P1; target = &P2;break;}
+      case 2 : {player = &P2; target = &P1;break;}
   }
-  if (joy->buttons[1]){
-    addEffect("turboBoost", &P2, &P2);
-  }
-  if (joy->buttons[2]){
-    addEffect("randomEff", &P2, &P1);
-  }
+
+  player->setVelocity(joy->axes[1]);
+  player->setTurning(joy->axes[3]);
+
+
+  for (int i = 0; i <= 2; i++)
+    {
+     if (joy->buttons[i]){player->useEffect(i, target);}
+    }
+
+  // P2.setVelocity (joy->axes[1]);
+  // P2.setTurning (joy->axes[3]);
+  //   if (joy->buttons[0]){
+  //   addEffect("stun", &P2, &P1);
+  // }
+  // if (joy->buttons[1]){
+  //   addEffect("turboBoost", &P2, &P2);
+  // }
+  // if (joy->buttons[2]){
+  //   addEffect("randomEff", &P2, &P1);
+  // }
   //ROS_INFO("P1 current vel: [%f]", joy->axes[1]);
 }
 
@@ -77,8 +92,8 @@ int main(int argc, char **argv)
   // turboBoost bb(&P1, &P1);
   // effectList.push_back(aa);
   // effectList.push_back(bb);
-  effect* obj2 = effect::Create("turboBoost");
-  effect* obj1 = effect::Create("stun");
+  //effect* obj2 = effect::Create("turboBoost");
+  //effect* obj1 = effect::Create("stun");
 
   //addEffect("turboBoost", &P1, &P1);
 

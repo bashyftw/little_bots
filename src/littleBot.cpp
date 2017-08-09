@@ -2,10 +2,13 @@
 #include "effectClass.h"
 #include <iostream>
 #include <tinyxml.h>
+#include <list> 
 
 using namespace std;
 #include <string>
 
+///globle timer for all players
+Timer tmr; 
 
 
 
@@ -107,6 +110,21 @@ void littleBot::effectWithinRange(){
           {currentTurn = -100;}    
 }
 
+
+void littleBot::useEffect(int E, littleBot* t){
+     string abilitySelected;
+     switch(E) {
+      case 0 : {abilitySelected = AbilityA; break;}
+      case 1 : {abilitySelected = AbilityB; break;}
+      case 2 : {abilitySelected = AbilityX; break;}
+
+  }
+     for(list<effect*>::iterator i = effectlist.begin(); i !=effectlist.end(); i++)
+                    {
+                    }
+      Ability = effect::Create(abilitySelected);
+}
+
 //Class Constructor
 
 littleBot::littleBot(bool fullpower){
@@ -144,9 +162,28 @@ littleBot::littleBot(string Name){
                cout << ipAddress << endl;
           pAbilities = pStats->NextSiblingElement("Abilities"); // currently only looking at forst two abilities
                pAbilities = pAbilities->FirstChildElement("AbilityA");
-                    effect* AbilityA = effect::Create(pAbilities->Attribute("AbilityName")); 
+                    AbilityA = string(pAbilities->Attribute("AbilityName"));
+                    ACD = atof(pAbilities->Attribute("CoolDown")); 
+                    ADur = atof(pAbilities->Attribute("Duration")); 
                pAbilities = pAbilities->NextSiblingElement("AbilityB");
-                    effect* AbilityB = effect::Create(pAbilities->Attribute("AbilityName")); 
+                    AbilityB = pAbilities->Attribute("AbilityName");
+                    BCD = atof(pAbilities->Attribute("CoolDown")); 
+                    BDur = atof(pAbilities->Attribute("Duration"));
+               pAbilities = pAbilities->NextSiblingElement("AbilityX");
+                    AbilityX = pAbilities->Attribute("AbilityName");
+                    XCD = atof(pAbilities->Attribute("CoolDown")); 
+                    XDur = atof(pAbilities->Attribute("Duration"));
+
+
+                    //Ability = effect::Create(pAbilities->Attribute("AbilityName")); 
+                    // for(list<effect*>::iterator i = effectlist.begin(); i !=effectlist.end(); i++)
+                    // {
+                    //      Ability = *i;
+                    //      Ability->getName();
+                    // }
+
+                    //effect* Ability = effect::Create(pAbilities->Attribute("AbilityName")); 
+
 
      }
      else
