@@ -6,35 +6,30 @@ using namespace std;
 #include <ctime>
 #include <list>
 
+//forward Dec///
 class littleBot;
 
 
 
 
 class effect{
-     protected:
-        string name;
-        string description;
-        littleBot* target;
-        littleBot* caster;
-       	double duration;
-       	double coolDown;
-       	double timerStart;
-   
+  protected:
+    string name;
+    string description;
+    littleBot* target;
+    littleBot* caster;
+    double duration;
+    double timerStart;
 
+  public:
+    effect();
+    ~effect();
 
-
-     public:
-     	effect();
-     	effect(littleBot* c, littleBot* t);
-
-        static effect* Create(string type);
-     	  virtual void applyEffect();
-      	bool checkCD(string name, littleBot* caster);
-      	bool checkTimeElapse();
-      	bool checkEffectActive();
-        string getName();
-        void setName(string n);
+    static effect* Create(string type, littleBot* c, littleBot* t, double effectDur);
+    virtual void applyEffect();
+    bool checkTimeElapse();
+    string getName();
+    void setName(string n);
 
 };
 
@@ -43,8 +38,7 @@ class turboBoost : public effect{
 	private:
 		
 	public:
-    turboBoost();
-		turboBoost(littleBot* c, littleBot* t);
+		turboBoost(littleBot* c, littleBot* t, double effectDur);
 		void applyEffect();
 
 };
@@ -53,19 +47,16 @@ class stun : public effect{
 	private:
 		
 	public:
-		stun();
-		stun(littleBot* c, littleBot* t);
+		stun(littleBot* c, littleBot* t, double effectDur);
 		void applyEffect();
 
 };
-
 
 class randomEff : public effect{
 	private:
 		
 	public:
-		randomEff();
-		randomEff(littleBot* c, littleBot* t);
+		randomEff(littleBot* c, littleBot* t, double effectDur);
 		void applyEffect();
 
 };

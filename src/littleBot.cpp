@@ -1,5 +1,6 @@
 #include "littleBot.h"
 #include "effectClass.h"
+#include "eventTimer.h"
 #include <iostream>
 #include <tinyxml.h>
 #include <list> 
@@ -8,7 +9,7 @@ using namespace std;
 #include <string>
 
 ///globle timer for all players
-Timer tmr; 
+Timer playersTimer; 
 
 
 
@@ -47,6 +48,20 @@ double littleBot::getVelocity (){
      return currentVel;
 }
 
+void littleBot::addEffect(effect* effectPtr){
+     effectList.push_back(effectPtr);
+}
+
+void littleBot::printOutCurrentEffects(){
+     cout << "player " << name <<" is effected by the following:" << endl;
+     for(list<effect*>::iterator i = effectList.begin(); i !=effectList.end(); i++)
+     {
+          effect* effectPtr = *i;
+          effectPtr->getName();
+     }
+}
+
+
 void littleBot::setVelocity(double velCMD){
      if ((velCMD < 0.1) && (velCMD > -0.1)){velCMD = 0;}
      if (velCMD > 0){
@@ -81,15 +96,33 @@ void littleBot::update(){
 
      withinRange();
 
-     /////check cooldowns and remove
+     /////check cooldowns and remove//////////
      for(list<coolDown*>::iterator i = coolDownList.begin(); i !=coolDownList.end(); i++)
      {
-          coolDown* test = *i;
-          if( (tmr.elapsed() - test->startTime) > activeEffectArray[test->id].effectCD){
-               cout << "time up" <<endl;
+          coolDown* CDPtr = *i;
+          if( (playersTimer.elapsed() - CDPtr->startTime) > activeEffectArray[CDPtr->id].effectCD){
+               delete CDPtr;
                coolDownList.erase(i++); // not sure why i++ not i
           } 
      }
+
+
+     ////Apply effects /////
+     for(list<effect*>::iterator i = effectList.begin(); i !=effectList.end(); i++)
+     {
+          effect* effectPtr = *i;
+          if(effectPtr->checkTimeElapse()){
+               delete effectPtr; 
+               effectList.erase(i++);
+          }else{
+               effectPtr->applyEffect();
+
+          }
+
+     }
+
+
+
 }
 
 void littleBot::withinRange(){
@@ -122,14 +155,13 @@ void littleBot::effectWithinRange(){
 
 
 void littleBot::useEffect(int E, littleBot* t){
-     string abilitySelected = activeEffectArray[E].effectName;
-     if (!effectOnCD(abilitySelected)){
+     if (!effectOnCD(activeEffectArray[E].effectName)){
           ////Creates effect
-          Ability = effect::Create(abilitySelected);
+          effect::Create(activeEffectArray[E].effectName, this, t, activeEffectArray[E].effectDur);
           //creates cool Down
           coolDown * CDptr = new coolDown();
-          CDptr->effectName = abilitySelected;
-          CDptr->startTime = tmr.elapsed();
+          CDptr->effectName = activeEffectArray[E].effectName;
+          CDptr->startTime = playersTimer.elapsed();
           CDptr->id = E;
           coolDownList.push_back(CDptr);
      }else {
@@ -149,19 +181,6 @@ bool littleBot::effectOnCD(string abilitySelected){
 
 }
 
-//Class Constructor
-
-littleBot::littleBot(bool fullpower){
-     cout << "creating player fullpower" << endl;
-     ipAddress = "192.168.1.172";
-     velocityForwardMax = 60;
-     velocityReverseMax = 40;
-     turningMax = 40;
-     acceleration = 10;
-
-     
-
-}
 
 littleBot::littleBot(string Name){
 
@@ -177,6 +196,7 @@ littleBot::littleBot(string Name){
           TiXmlHandle hDoc(&doc);
           TiXmlElement *pRoot, *pStats, *pAbilities; 
           pRoot = doc.FirstChildElement("Player");
+          name = pRoot->Attribute("Name");
           pStats = pRoot->FirstChildElement("Stats");
                velocityForwardMax = atoi(pStats->Attribute("velocityForwardMax"));
                velocityReverseMax = atoi(pStats->Attribute("velocityReverseMax"));
@@ -196,18 +216,7 @@ littleBot::littleBot(string Name){
                pAbilities = pAbilities->NextSiblingElement("AbilityX");
                     activeEffectArray[2].effectName = string(pAbilities->Attribute("AbilityName"));
                     activeEffectArray[2].effectCD = atof(pAbilities->Attribute("CoolDown")); 
-                    activeEffectArray[2].effectDur = atof(pAbilities->Attribute("Duration"));
-
-
-                    //Ability = effect::Create(pAbilities->Attribute("AbilityName")); 
-                    // for(list<effect*>::iterator i = effectlist.begin(); i !=effectlist.end(); i++)
-                    // {
-                    //      Ability = *i;
-                    //      Ability->getName();
-                    // }
-
-                    //effect* Ability = effect::Create(pAbilities->Attribute("AbilityName")); 
-
+                    activeEffectArray[2].effectDur = atof(pAbilities->Attribute("Duration")); 
 
      }
      else
