@@ -1,0 +1,13 @@
+<Player Name="captainWOW">
+<Stats         velocityForwardMax="35"     velocityReverseMax="20"     turningMax="10"             acceleration="24"           ip="192.168.1.174"         />
+<Abilities>
+<AbilityA
+ AbilityName="stun"          Duration="1"  CoolDown="60"              />
+<AbilityB
+ AbilityName="turboBoost"    Duration="3"  CoolDown="27"              />
+<AbilityX
+ AbilityName="randomEff"     Duration="1"  CoolDown="60"              />
+<AbilityY
+ AbilityName="na"            Duration="0"  CoolDown="0" />
+</Abilities>
+</Player>

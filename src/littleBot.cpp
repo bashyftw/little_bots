@@ -198,8 +198,8 @@ littleBot::littleBot(string Name){
           pRoot = doc.FirstChildElement("Player");
           name = pRoot->Attribute("Name");
           pStats = pRoot->FirstChildElement("Stats");
-               velocityForwardMax = atoi(pStats->Attribute("velocityForwardMax"));
-               velocityReverseMax = atoi(pStats->Attribute("velocityReverseMax"));
+               velocityForwardMax = atoi(pStats->Attribute("velocityForwardMax"))*0.75;
+               velocityReverseMax = atoi(pStats->Attribute("velocityReverseMax"))*0.75;
                turningMax = atoi(pStats->Attribute("turningMax"));
                acceleration = atoi(pStats->Attribute("acceleration"));
                ipAddress = pStats->Attribute("ip");

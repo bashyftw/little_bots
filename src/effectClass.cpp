@@ -66,7 +66,8 @@ turboBoost::turboBoost(littleBot* c, littleBot* t, double effectDur){
 }
 
 void turboBoost::applyEffect(){
-	target->effectVelocity(2);
+	target->effectVelocity(1.5);
+	target->effectTurning(1.5);
 }
 
 
