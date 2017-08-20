@@ -106,7 +106,7 @@ void littleBot::update(){
           } 
      }
 
-
+     //printOutCurrentEffects();
      ////Apply effects /////
      for(list<effect*>::iterator i = effectList.begin(); i !=effectList.end(); i++)
      {

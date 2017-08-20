@@ -17,7 +17,7 @@ int rate = 10;
 ///////Create Bots ///////
 
 littleBot P1(string("bashy"));
-littleBot P2(string("captionWOW"));
+littleBot P2(string("captainWOW"));
 
 
 little_bots::botMsg CMD_Message;

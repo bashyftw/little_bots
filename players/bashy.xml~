@@ -2,7 +2,7 @@
 <Stats         velocityForwardMax="40"     velocityReverseMax="40"     turningMax="20"             acceleration="64"           ip="192.168.1.172"         />
 <Abilities>
 <AbilityA
- AbilityName="stun"          Duration="1"  CoolDown="10"              />
+ AbilityName="stun"          Duration="1"  CoolDown="60"              />
 <AbilityB
  AbilityName="turboBoost"    Duration="1"  CoolDown="60"              />
 <AbilityX

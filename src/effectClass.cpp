@@ -36,6 +36,7 @@ bool effect::checkTimeElapse(){
 		timerStart = effectTimer.elapsed();
 		return false;
 	}else{
+		//cout << effectTimer.elapsed() <<endl;
 		double runTime = effectTimer.elapsed() - timerStart;
 		cout << name << "  " << runTime << endl;
 
@@ -74,6 +75,7 @@ stun::stun(littleBot* c, littleBot* t, double effectDur){
 	caster = c;
 	target = t;
 	duration = effectDur;
+	timerStart = 0;
 	name = "stun";
 	t->addEffect(this);
 }
@@ -88,6 +90,7 @@ void stun::applyEffect(){
 randomEff::randomEff(littleBot* c, littleBot* t, double effectDur){
 	caster = c;
 	target = t;
+	timerStart = 0;
 	duration = effectDur;
 	name = "randomEff";
 	t->addEffect(this);
